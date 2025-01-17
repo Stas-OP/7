@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шифрование текста</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="auth-forms">
+            <div class="form-container">
+                <h2>Регистрация</h2>
+                <form id="register-form">
+                    <input type="text" name="username" placeholder="Имя пользователя" required>
+                    <input type="password" name="password" placeholder="Пароль" required>
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            </div>
+
+            <div class="form-container">
+                <h2>Вход</h2>
+                <form id="login-form">
+                    <input type="text" name="username" placeholder="Имя пользователя" required>
+                    <input type="password" name="password" placeholder="Пароль" required>
+                    <button type="submit">Войти</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="main-content" style="display: none;">
+            <div class="header">
+                <h2>Добро пожаловать, <span id="username-display"></span>!</h2>
+                <button id="logout-btn">Выйти</button>
+            </div>
+
+            <div class="form-container">
+                <h3>Добавить текст</h3>
+                <form id="add-text-form">
+                    <textarea name="text" placeholder="Введите текст" required></textarea>
+                    <button type="submit">Сохранить</button>
+                </form>
+            </div>
+
+            <div class="form-container">
+                <h3>Шифрование/Дешифрование</h3>
+                <form id="cipher-form">
+                    <textarea name="text" placeholder="Введите текст" required></textarea>
+                    <input type="text" name="key" placeholder="Ключ шифрования" required>
+                    <div class="button-group">
+                        <button type="button" id="encrypt-btn">Зашифровать</button>
+                        <button type="button" id="decrypt-btn">Расшифровать</button>
+                    </div>
+                    <textarea id="cipher-result" placeholder="Результат" readonly></textarea>
+                </form>
+            </div>
+
+            <div class="texts-container">
+                <h3>Мои тексты</h3>
+                <div id="texts-list"></div>
+            </div>
+        </div>
+
+        <div id="text-view" style="display: none;">
+            <div class="header">
+                <button id="back-btn">← Назад</button>
+            </div>
+            <div class="form-container">
+                <h3>Просмотр текста</h3>
+                <div id="full-text"></div>
+                <div id="text-date" class="text-date"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

@@ -1,145 +1,94 @@
-def toLowerCase(text):
+import numpy as np
+
+def to_lower_case(text):
     return text.lower()
 
-def removeSpaces(text):
-    return "".join(i for i in text if i != " ")
+def remove_spaces(text):
+    return text.replace(" ", "")
 
-def Diagraph(text):
-    Diagraph = []
-    group = 0
-    for i in range(2, len(text), 2):
-        Diagraph.append(text[group:i])
-        group = i
-    Diagraph.append(text[group:])
-    return Diagraph
+def generate_key_table(key):
+    key = remove_spaces(to_lower_case(key))
+    key = key.replace('j', 'i')
+    key = ''.join(dict.fromkeys(key))  # Remove duplicate letters
 
-def FillerLetter(text):
-    k = len(text)
-    if k % 2 == 0:
-        for i in range(0, k, 2):
-            if text[i] == text[i+1]:
-                new_word = text[0:i+1] + str('x') + text[i+1:]
-                new_word = FillerLetter(new_word)
-                break
-            else:
-                new_word = text
-    else:
-        for i in range(0, k-1, 2):
-            if text[i] == text[i+1]:
-                new_word = text[0:i+1] + str('x') + text[i+1:]
-                new_word = FillerLetter(new_word)
-                break
-            else:
-                new_word = text
-    return new_word
+    alphabet = "abcdefghiklmnopqrstuvwxyz"  # 'j' is excluded
+    key_table = [c for c in key if c in alphabet]
 
-list1 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'l', 'm',
-         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    for char in alphabet:
+        if char not in key_table:
+            key_table.append(char)
 
-def generateKeyTable(word, list1):
-    key_letters = []
-    for i in word:
-        if i not in key_letters:
-            key_letters.append(i)
+    key_table = np.array(key_table).reshape(5, 5)
+    return key_table
 
-    compElements = []
-    for i in key_letters:
-        if i not in compElements:
-            compElements.append(i)
-    for i in list1:
-        if i not in compElements:
-            compElements.append(i)
+def search(key_table, a, b):
+    if a == 'j':
+        a = 'i'
+    if b == 'j':
+        b = 'i'
 
-    matrix = []
-    while compElements != []:
-        matrix.append(compElements[:5])
-        compElements = compElements[5:]
-
-    return matrix
-
-def search(mat, element):
+    p1 = p2 = None
     for i in range(5):
         for j in range(5):
-            if(mat[i][j] == element):
-                return i, j
+            if key_table[i, j] == a:
+                p1 = (i, j)
+            elif key_table[i, j] == b:
+                p2 = (i, j)
+    return p1, p2
 
-def encrypt_RowRule(matr, e1r, e1c, e2r, e2c):
-    char1 = matr[e1r][(e1c + 1) % 5]
-    char2 = matr[e2r][(e2c + 1) % 5]
-    return char1, char2
-
-def encrypt_ColumnRule(matr, e1r, e1c, e2r, e2c):
-    char1 = matr[(e1r + 1) % 5][e1c]
-    char2 = matr[(e2r + 1) % 5][e2c]
-    return char1, char2
-
-def encrypt_RectangleRule(matr, e1r, e1c, e2r, e2c):
-    char1 = matr[e1r][e2c]
-    char2 = matr[e2r][e1c]
-    return char1, char2
-
-def decrypt_RowRule(matr, e1r, e1c, e2r, e2c):
-    char1 = matr[e1r][(e1c - 1) % 5]
-    char2 = matr[e2r][(e2c - 1) % 5]
-    return char1, char2
-
-def decrypt_ColumnRule(matr, e1r, e1c, e2r, e2c):
-    char1 = matr[(e1r - 1) % 5][e1c]
-    char2 = matr[(e2r - 1) % 5][e2c]
-    return char1, char2
-
-def encryptByPlayfairCipher(Matrix, plainList):
-    CipherText = []
-    for i in range(0, len(plainList)):
-        ele1_x, ele1_y = search(Matrix, plainList[i][0])
-        ele2_x, ele2_y = search(Matrix, plainList[i][1])
-
-        if ele1_x == ele2_x:
-            c1, c2 = encrypt_RowRule(Matrix, ele1_x, ele1_y, ele2_x, ele2_y)
-        elif ele1_y == ele2_y:
-            c1, c2 = encrypt_ColumnRule(Matrix, ele1_x, ele1_y, ele2_x, ele2_y)
-        else:
-            c1, c2 = encrypt_RectangleRule(Matrix, ele1_x, ele1_y, ele2_x, ele2_y)
-
-        cipher = c1 + c2
-        CipherText.append(cipher)
-    return CipherText
-
-def decryptByPlayfairCipher(Matrix, cipherList):
-    PlainText = []
-    for i in range(0, len(cipherList)):
-        ele1_x, ele1_y = search(Matrix, cipherList[i][0])
-        ele2_x, ele2_y = search(Matrix, cipherList[i][1])
-
-        if ele1_x == ele2_x:
-            c1, c2 = decrypt_RowRule(Matrix, ele1_x, ele1_y, ele2_x, ele2_y)
-        elif ele1_y == ele2_y:
-            c1, c2 = decrypt_ColumnRule(Matrix, ele1_x, ele1_y, ele2_x, ele2_y)
-        else:
-            c1, c2 = encrypt_RectangleRule(Matrix, ele1_x, ele1_y, ele2_x, ele2_y)
-
-        plain = c1 + c2
-        PlainText.append(plain)
-    return PlainText
+def prepare_text(text):
+    text = remove_spaces(to_lower_case(text))
+    text = text.replace('j', 'i')
+    
+    # Add filler 'x' between double letters
+    i = 0
+    while i < len(text)-1:
+        if text[i] == text[i+1]:
+            text = text[:i+1] + 'x' + text[i+1:]
+        i += 2
+    
+    # Make the length even by adding 'z' if needed
+    if len(text) % 2 != 0:
+        text += 'z'
+        
+    return text
 
 def encrypt(text: str, key: str) -> str:
-    text = removeSpaces(toLowerCase(text))
-    PlainTextList = Diagraph(FillerLetter(text))
-    if len(PlainTextList[-1]) != 2:
-        PlainTextList[-1] = PlainTextList[-1]+'z'
+    text = prepare_text(text)
+    key_table = generate_key_table(key)
+    encrypted = []
 
-    key = toLowerCase(key)
-    Matrix = generateKeyTable(key, list1)
+    for i in range(0, len(text), 2):
+        p1, p2 = search(key_table, text[i], text[i+1])
 
-    CipherList = encryptByPlayfairCipher(Matrix, PlainTextList)
-    return "".join(CipherList)
+        if p1[0] == p2[0]:  # Same row
+            encrypted.append(key_table[p1[0], (p1[1]+1)%5])
+            encrypted.append(key_table[p2[0], (p2[1]+1)%5])
+        elif p1[1] == p2[1]:  # Same column
+            encrypted.append(key_table[(p1[0]+1)%5, p1[1]])
+            encrypted.append(key_table[(p2[0]+1)%5, p2[1]])
+        else:  # Rectangle rule
+            encrypted.append(key_table[p1[0], p2[1]])
+            encrypted.append(key_table[p2[0], p1[1]])
+
+    return ''.join(encrypted)
 
 def decrypt(cipher_text: str, key: str) -> str:
-    cipher_text = removeSpaces(toLowerCase(cipher_text))
-    CipherTextList = Diagraph(cipher_text)
+    cipher_text = remove_spaces(to_lower_case(cipher_text))
+    key_table = generate_key_table(key)
+    decrypted = []
 
-    key = toLowerCase(key)
-    Matrix = generateKeyTable(key, list1)
+    for i in range(0, len(cipher_text), 2):
+        p1, p2 = search(key_table, cipher_text[i], cipher_text[i+1])
 
-    PlainList = decryptByPlayfairCipher(Matrix, CipherTextList)
-    return "".join(PlainList) 
+        if p1[0] == p2[0]:  # Same row
+            decrypted.append(key_table[p1[0], (p1[1]-1)%5])
+            decrypted.append(key_table[p2[0], (p2[1]-1)%5])
+        elif p1[1] == p2[1]:  # Same column
+            decrypted.append(key_table[(p1[0]-1)%5, p1[1]])
+            decrypted.append(key_table[(p2[0]-1)%5, p2[1]])
+        else:  # Rectangle rule
+            decrypted.append(key_table[p1[0], p2[1]])
+            decrypted.append(key_table[p2[0], p1[1]])
+
+    return ''.join(decrypted) 

@@ -1,11 +1,26 @@
 from fastapi import FastAPI, HTTPException, Request
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 from schemas import UserBase, TokenResponse, RequestHistory, CipherRequest, CipherResponse, TextRequest, TextResponse
 from auth import *
 from cipher import encrypt, decrypt
 from typing import List
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+def get_user_by_token(token: str):
+    users = load_users()
+    for data in users.values():
+        if data["token"] == token:
+            return data
+    return None
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
