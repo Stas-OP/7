@@ -58,9 +58,6 @@ class SimpleApiTests(unittest.TestCase):
         decrypt_response = requests.post(f"{self.BASE_URL}/decrypt?token={token}", json=decrypt_payload)
         self.assertEqual(decrypt_response.status_code, 200)
         decrypted_text = decrypt_response.json()["result"]
-        
-        # Примечание: Шифр Плейфера может добавлять 'x' или 'z', поэтому точное совпадение не всегда будет
-        # Это очень простой тест, проверяющий только успешность вызова
         self.assertIsInstance(decrypted_text, str) 
 
     def test_5_add_get_text(self):
