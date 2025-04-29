@@ -57,5 +57,49 @@
                 "timestamp": "2025-01-17T09:43:38.913388"
             }
         ]
+    },
+    "stas3": {
+        "id": 1745890984,
+        "password_hash": "521e4197b4a34cccb36131a4ea61e301f26ea8661f708db191542c7f84c810eb",
+        "token": "19m755k-piIZgq6vUWHGng",
+        "texts": [
+            {
+                "id": 2,
+                "text": "\u0430\u043f\u0432\u043f\u043adghg",
+                "timestamp": "2025-04-29T04:51:06.215674"
+            }
+        ]
+    },
+    "testuser_57ca5de8": {
+        "id": 1745892362,
+        "password_hash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+        "token": "DYTTTCkZRI016ALB4755nA"
+    },
+    "testuser_45ad95f9": {
+        "id": 1745892364,
+        "password_hash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+        "token": "GaGp5SLDU8vrFL9ll5p7UA"
+    },
+    "testuser_2c6165c5": {
+        "id": 1745892368,
+        "password_hash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+        "token": "h_hJkvjux_aIHXZTQxn0XQ"
+    },
+    "testuser_bb22cba5": {
+        "id": 1745892372,
+        "password_hash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+        "token": "-8-dUvlul4-zL5it9IMMNw"
+    },
+    "testuser_f2f5e660": {
+        "id": 1745892378,
+        "password_hash": "ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f",
+        "token": "90EHmKARhTqZmScIcCzXQw",
+        "texts": [
+            {
+                "id": 1,
+                "text": "This is a test text.",
+                "timestamp": "2025-04-29T05:06:20.909209"
+            }
+        ]
     }
 }

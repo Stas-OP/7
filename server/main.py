@@ -245,5 +245,27 @@ async def delete_text_by_id(text_id: int, token: str):
     
     return {"message": "Текст успешно удален"}
 
+@app.patch("/texts/{text_id}", response_model=TextResponse)
+async def update_existing_text(text_id: int, request: TextRequest, token: str):
+    users = load_users()
+    user_data = None
+    for data in users.values():
+        if data["token"] == token:
+            user_data = data
+            break
+    
+    if not user_data:
+        raise HTTPException(status_code=401, detail="Недействительный токен")
+    
+    updated_text = update_text(user_data["id"], text_id, request.text)
+    if not updated_text:
+        raise HTTPException(status_code=404, detail="Текст не найден или не принадлежит пользователю")
+    
+    return TextResponse(
+        id=updated_text["id"],
+        text=updated_text["text"],
+        timestamp=datetime.fromisoformat(updated_text["timestamp"])
+    )
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

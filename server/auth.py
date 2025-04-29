@@ -102,3 +102,16 @@ def delete_text(user_id: int, text_id: int) -> bool:
                     save_users(users)
                     return True
     return False 
+
+def update_text(user_id: int, text_id: int, new_text: str) -> dict:
+    users = load_users()
+    for user_data in users.values():
+        if user_data["id"] == user_id:
+            texts = user_data.get("texts", [])
+            for text in texts:
+                if text["id"] == text_id:
+                    text["text"] = new_text
+                    text["timestamp"] = datetime.now().isoformat()
+                    save_users(users)
+                    return text
+    return None 
